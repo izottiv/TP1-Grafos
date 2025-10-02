@@ -24,12 +24,12 @@ while(menu == True):
     if  escolha == 1:
         print(f"\nO número de cidades no grafo é: {g.numeroDeCidades()}")
     elif escolha == 2:
-        print(f"\nA quantidade de estradas no grafo é:{g.numeroEstradas()}")
+        print(f"\nA quantidade de estradas no grafo é: {g.numeroEstradas()}")
     elif escolha == 3:
         v = input("Digite a cidade no qual deseja determinar os vizinhos:").upper()
         print(f"\nA cidade {v} é vizinha das cidades: {', '.join(g.vizinhosDoVertice(v))}")
     elif escolha == 4:
-        v = input("Digite a cidade no qual deseja determinar a quantidade de vizinhos: \n").upper()
+        v = input("Digite a cidade no qual deseja determinar a quantidade de vizinhos: ").upper()
         print(f"\nA cidade {v} possui {g.grauDoVertice(v)} vizinhos")
     elif escolha == 5:
         v, u = input("Digite as duas cidades que desenha descobrir a menor distancia (separadas por espaço): ").split()

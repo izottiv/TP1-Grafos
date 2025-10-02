@@ -15,45 +15,45 @@ class Grafo:
         self.lista[v].append((u,peso))
 
     def printDicionario(self): #Imprime o dicionario
-        for v, vizinhos in self.lista.items(): #lista.items retorna tanto o indice do dicionario quanto as duplas, ent uma é armazenada em v(vertices) e os vizinhos e pesos são armazenados em vizinhos
+        for v, vizinhos in self.lista.items(): #lista.items retorna tanto o indice do dicionario quanto as tuplas, ent uma é armazenada em v(vertices) e os vizinhos e pesos são armazenados em vizinhos
             print(v, "->", vizinhos)
 
     def Cidades(self):
-        vertices = []
-        for v, _ in self.lista.items():
+        vertices = []  
+        for v, _ in self.lista.items(): #pega apenas os vertices do dicionario e armazena eles na lista de vertices
             vertices.append(v)
         return vertices
     
     def numeroDeCidades(self):
-        return len(self.Cidades())
+        return len(self.Cidades()) #so um len pra pegar o tamanho da lista de vertice q é retornada na função cidade
     
     def estradas(self):
         estradasV = []
-        vistas = set()
-        for v, estradas in self.lista.items():
-            for u, _ in estradas:
-                if (u,v) not in vistas:
+        vistas = set() #cria um set pra n repetir aresta tipo (1-2) e (2-1)
+        for v, estradas in self.lista.items(): # pega as estrada e vertice
+            for u, _ in estradas: #ignora os pesos
+                if (u,v) not in vistas: #se a aresta n tiver sido adicionada ainda
                     estradasV.append((v,u))
                     vistas.add((v,u))
         return estradasV
     
     def numeroEstradas(self):
-        return (len(self.estradas()))
+        return (len(self.estradas())) #len pra retornar o numero de cidades
 
     def vizinhosDoVertice(self, vertice):
         vizinhosV = []
-        for v, vizinhos in self.lista.items():
-            if v == vertice:
+        for v, vizinhos in self.lista.items(): #pega os vertices e vizinhos
+            if v == vertice: #se encontrar o vertice pega a lista de ajacencia dele e armaenza no vetor
                 for vz, _ in vizinhos:
                     vizinhosV.append(vz)
         return vizinhosV
 
     def grauDoVertice(self, vertice):
-        return len(self.vizinhosDoVertice(vertice))
+        return len(self.vizinhosDoVertice(vertice)) #len pra encontrar grau do vertice
     
     def dijkstra(self, v):
-        dist = {v: float('inf') for v in self.lista}
-        dist[v] = 0
+        dist = {v: float('inf') for v in self.lista} # cria um dicionario com o vertice e define a distancia como infinito 
+        dist[v] = 0 # a distancia do vertice pra ele msm é 0
         fila = [(0, v)]
         
         while fila:
@@ -62,14 +62,14 @@ class Grafo:
                 continue
 
             for vizinho, peso in self.lista[v]:
-                nova_dist = distancia_atual + peso
+                nova_dist = distancia_atual + peso     #calcula distancia e substitui se for menor (é o algoritmo dijkstra ent n tem pq explicar mt)
                 if nova_dist < dist[vizinho]:
                     dist[vizinho] = nova_dist
                     heapq.heappush(fila, (nova_dist, vizinho))
         return dist
     
     def retornarMenorDistanciaEntreDuasCidades(self, v, u):
-        menor = self.dijkstra(v)
+        menor = self.dijkstra(v) # pega o vetor
         return (menor[u])
     
     def ehConexo(self):
@@ -79,7 +79,7 @@ class Grafo:
             if v in visitados: #se o v ja tiver nos visitados volta, se n adiciona
                 return
             visitados.add(v)
-            for vizinho, _ in self.lista[v]: #pega os vizinhos de x vertice e chama dfs pra ele para q possa continuar seguindo a busca
+            for vizinho, _ in self.lista[v]: #pega os vizinhos de x vertice e chama dfs(busca em profundidade) pra ele para q possa continuar seguindo a busca
                 dfs(vizinho)
         dfs(vertices[0]) #faz com o primeiro vertice pq ja q é conexo n faz diferença
             
@@ -91,10 +91,10 @@ class Grafo:
 
     def cidadesCriticas(self):
         Criticas = set()
-        vertices = self.Cidades()
-        for a in vertices:  
-            visitados = set()    
-            def dfs(v):
+        vertices = self.Cidades() #usa a mesma logica da busca em profundidade, mas segue a seguinte logica:
+        for a in vertices:        #Pega o vetor de vertices e cria uma lista tbm de visitados, remove um vertice temporariamente e executa a busca em profundidade(ta explicada ali em cima) pra ver se é conexo se for não adiciona nada
+            visitados = set()     #Se não for adiciona no set de Vertices criticos, apos isso remove o proximo vertice(o antigo retorna) e faz o msm teste
+            def dfs(v):           #remove no caso = desconsiderar o vertice não realmente remove
                 if v in visitados:
                     return
                 visitados.add(v)
