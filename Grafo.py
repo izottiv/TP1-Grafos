@@ -93,7 +93,7 @@ class Grafo:
         Criticas = set()
         vertices = self.Cidades() #usa a mesma logica da busca em profundidade, mas segue a seguinte logica:
         for a in vertices:        #Pega o vetor de vertices e cria uma lista tbm de visitados, remove um vertice temporariamente e executa a busca em profundidade(ta explicada ali em cima) pra ver se é conexo se for não adiciona nada
-            visitados = set()     #Se não for adiciona no set de Vertices criticos, apos isso remove o proximo vertice(o antigo retorna) e faz o msm teste
+            visitados = set()     #Se não for, adiciona no set de Vertices criticos, apos isso remove o proximo vertice(o antigo retorna) e faz o msm teste
             def dfs(v):           #remove no caso = desconsiderar o vertice não realmente remove
                 if v in visitados:
                     return
@@ -109,41 +109,63 @@ class Grafo:
     
     def validacaoPasseioTuristico(self):
         vertices = self.Cidades()
+
+        #tenta começar um passeio turístico a partir de cada cidade
         for inicio in vertices:
-            n_vertices_necessarios = 4
-            pilha = [inicio]
-            na_pilha = {inicio}
-            melhor_ciclo = []
-            # busca em profundidade para encontrar ciclos fechados (voltam ao 'inicio')
-            # guarda o melhor ciclo encontrado em `melhor_ciclo`.
-            
-            # algoritmo de busca em profundidade - menor caminho
+            n_vertices_necessarios = 4  #número mínimo de cidades diferentes necessarias no ciclo
+            pilha = [inicio]            #caminho atual
+            na_pilha = {inicio}         #conjunto para controlar quais cidades já estão no caminho
+            melhor_ciclo = []           #guarda o melhor ciclo encontrado até agora
+
+            #função recursiva de busca em profundidade (DFS)
             def dfs(v):
-                nonlocal melhor_ciclo
+                nonlocal melhor_ciclo  #permite alterar a variável "melhor_ciclo" definida fora da função
+
+                #percorre todos os vizinhos da cidade atual "v"
                 for vizinho, _ in self.lista[v]:
+                    #caso especial: achou um ciclo que volta para a cidade inicial
                     if vizinho == inicio:
+                        #conta quantas cidades diferentes existem no caminho
                         vertices_diferentes = len(set(pilha))
-                        if vertices_diferentes >= 3:
-                            ciclo = pilha[:] + [inicio]
+                        if vertices_diferentes >= 4:  #precisa ter pelo menos 4 cidades diferentes
+                            ciclo = pilha[:] + [inicio]  #copia o caminho atual e fecha o ciclo
+
+                            #pega o número de cidades diferentes do melhor ciclo já encontrado
                             melhor_diferente = len(set(melhor_ciclo[:-1])) if melhor_ciclo else 0
+
+                            #se este ciclo for "maior" (mais cidades diferentes), substitui o melhor
                             if vertices_diferentes > melhor_diferente:
                                 melhor_ciclo = ciclo
+
+                            #se já alcançou o mínimo de cidades desejadas, pode encerrar a busca
                             if vertices_diferentes >= n_vertices_necessarios:
                                 return True
+
+                    #caso comum: explorar vizinhos que ainda não estão no caminho
                     elif vizinho not in na_pilha:
-                        na_pilha.add(vizinho)
-                        pilha.append(vizinho)
-                        parada = dfs(vizinho)
-                        pilha.pop()
-                        na_pilha.remove(vizinho)
+                        na_pilha.add(vizinho)   #marca vizinho como "visitado"
+                        pilha.append(vizinho)   #adiciona vizinho ao caminho
+                        parada = dfs(vizinho)   #continua a busca a partir desse vizinho
+                        pilha.pop()             #desfaz a escolha (backtracking)
+                        na_pilha.remove(vizinho) #remove da lista de visitados
+
+                        #se achou um ciclo válido e já pode parar, retorna
                         if parada:
                             return True
+
+                #se não encontrou ciclo nesse caminho, retorna False
                 return False
+
+            #chama o DFS a partir da cidade inicial
             dfs(inicio)
+
+            #se encontrou algum ciclo, retorna o melhor
             if melhor_ciclo:
                 return melhor_ciclo
             else:
+                #se não encontrou nada, retorna lista vazia
                 return []
+
         
     def imprimePasseioTuristico(self):
         caminho = self.validacaoPasseioTuristico()
