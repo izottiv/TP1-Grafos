@@ -106,3 +106,50 @@ class Grafo:
             if len(visitados) != len(vertices) - 1:
                 Criticas.add(a)
         return Criticas
+    
+    def validacaoPasseioTuristico(self):
+        vertices = self.Cidades()
+        for inicio in vertices:
+            n_vertices_necessarios = 4
+            pilha = [inicio]
+            na_pilha = {inicio}
+            melhor_ciclo = []
+            # busca em profundidade para encontrar ciclos fechados (voltam ao 'inicio')
+            # guarda o melhor ciclo encontrado em `melhor_ciclo`.
+            
+            # algoritmo de busca em profundidade - menor caminho
+            def dfs(v):
+                nonlocal melhor_ciclo
+                for vizinho, _ in self.lista[v]:
+                    if vizinho == inicio:
+                        vertices_diferentes = len(set(pilha))
+                        if vertices_diferentes >= 3:
+                            ciclo = pilha[:] + [inicio]
+                            melhor_diferente = len(set(melhor_ciclo[:-1])) if melhor_ciclo else 0
+                            if vertices_diferentes > melhor_diferente:
+                                melhor_ciclo = ciclo
+                            if vertices_diferentes >= n_vertices_necessarios:
+                                return True
+                    elif vizinho not in na_pilha:
+                        na_pilha.add(vizinho)
+                        pilha.append(vizinho)
+                        parada = dfs(vizinho)
+                        pilha.pop()
+                        na_pilha.remove(vizinho)
+                        if parada:
+                            return True
+                return False
+            dfs(inicio)
+            if melhor_ciclo:
+                return melhor_ciclo
+            else:
+                return []
+        
+    def imprimePasseioTuristico(self):
+        caminho = self.validacaoPasseioTuristico()
+        if caminho:
+            # imprime o ciclo encontrado como sequência de cidades
+            print(f"O passeio turístico encontrado é: {' -> '.join(caminho)}")
+        else:
+            # aviso caso nenhum ciclo adequado seja encontrado
+            print("O passeio turístico não foi encontrado.")

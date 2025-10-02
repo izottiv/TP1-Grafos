@@ -20,6 +20,8 @@ while(menu == True):
     "5 - Calcular o menor caminho entre duas cidades escolhidas\n" \
     "6 - Verificar se a rede é conexa\n" \
     "7 - Identificar cidades críticas\n" \
+    "8 - Validação passeio turístico \n" \
+    "9 - Exemplo de passeio turístico \n" \
     "Escolha: "))
     if  escolha == 1:
         print(f"\nO número de cidades no grafo é: {g.numeroDeCidades()}")
@@ -51,6 +53,15 @@ while(menu == True):
             print(f"\n As cidades criticas são {", ".join(v)}")
         else:
             print(f"\n O grafo não possui cidades críticas")
+    elif escolha == 8:
+        passeio = g.validacaoPasseioTuristico()
+        validacaoPasseio = passeio == []
+        if validacaoPasseio:
+            print("Não foi possível encontrar um passeio turístico com pelo menos 4 cidades")
+        else:
+            print("Foi possível encontrar um passeio turístico com pelo menos 4 cidades")
+    elif escolha == 9:
+        g.imprimePasseioTuristico()
     print()
     print("="*50)
     retornar= int(input("Deseja retornar ao menu para fazer outra operação:\n" \
