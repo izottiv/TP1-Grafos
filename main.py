@@ -9,6 +9,7 @@ with open(nomeArquivo) as arquivo:
         v, u, peso = linha.split(",")
         g.adicionarAresta(v, u, int(peso))
 
+g.cidadesCriticas()
 menu = True
 while(menu == True):
     escolha = int(input("Deseja realizar qual operação utilizando a bibliotceca ?\n" \
@@ -17,6 +18,8 @@ while(menu == True):
     "3 - Retornar os vizinhos de uma cidade fornecida\n" \
     "4 - Determinar a quantidade de vizinhos de uma cidade fornecida\n" \
     "5 - Calcular o menor caminho entre duas cidades escolhidas\n" \
+    "6 - Verificar se a rede é conexa\n" \
+    "7 - Identificar cidades críticas\n" \
     "Escolha: "))
     if  escolha == 1:
         print(f"\nO número de cidades no grafo é: {g.numeroDeCidades()}")
@@ -33,10 +36,28 @@ while(menu == True):
         v = v.upper()
         u = u.upper()
         print(f"\nA menor distancia entre a cidade {v} e {u} é {g.retornarMenorDistanciaEntreDuasCidades(v, u)}");
-    retornar= int(input("\nDeseja retornar ao menu para fazer outra operação:\n" \
+    elif escolha == 6:
+        v = g.ehConexo()
+        if v == True:
+            print(f"\nSim, a rede é conexa")
+        else:
+            print(f"\nNão, a rede não é conexa")
+    elif escolha == 7:
+        v = g.cidadesCriticas()
+        v = list(v)
+        if len(v) == 1:
+            print(f"\n A cidade critica é {v[0]}")
+        elif len(v)>1:
+            print(f"\n As cidades criticas são {", ".join(v)}")
+        else:
+            print(f"\n O grafo não possui cidades críticas")
+    print()
+    print("="*50)
+    retornar= int(input("Deseja retornar ao menu para fazer outra operação:\n" \
     "1 - Sim\n" \
     "2 - Não, encerrar o programa\n"
     "Escolha: "))
     print("="*50)
+    print()
     if retornar == 2:
         menu = False

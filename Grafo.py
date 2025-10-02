@@ -18,11 +18,14 @@ class Grafo:
         for v, vizinhos in self.lista.items(): #lista.items retorna tanto o indice do dicionario quanto as duplas, ent uma é armazenada em v(vertices) e os vizinhos e pesos são armazenados em vizinhos
             print(v, "->", vizinhos)
 
-    def numeroDeCidades(self):
+    def Cidades(self):
         vertices = []
         for v, _ in self.lista.items():
             vertices.append(v)
-        return len(vertices)
+        return vertices
+    
+    def numeroDeCidades(self):
+        return len(self.Cidades())
     
     def estradas(self):
         estradasV = []
@@ -71,6 +74,35 @@ class Grafo:
     
     def ehConexo(self):
         visitados  = set()
-        print(self.lista)
+        vertices = self.Cidades()
+        def dfs(v):
+            if v in visitados: #se o v ja tiver nos visitados volta, se n adiciona
+                return
+            visitados.add(v)
+            for vizinho, _ in self.lista[v]: #pega os vizinhos de x vertice e chama dfs pra ele para q possa continuar seguindo a busca
+                dfs(vizinho)
+        dfs(vertices[0]) #faz com o primeiro vertice pq ja q é conexo n faz diferença
+            
+        if len(visitados) == len(vertices):
+            return True
+        else:
+            return False
 
 
+    def cidadesCriticas(self):
+        Criticas = set()
+        vertices = self.Cidades()
+        for a in vertices:  
+            visitados = set()    
+            def dfs(v):
+                if v in visitados:
+                    return
+                visitados.add(v)
+                for vizinho, _ in self.lista[v]:
+                    if vizinho != a:   
+                        dfs(vizinho)
+            inicio = next((v for v in vertices if v != a), None)
+            dfs(inicio)
+            if len(visitados) != len(vertices) - 1:
+                Criticas.add(a)
+        return Criticas
