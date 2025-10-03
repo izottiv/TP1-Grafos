@@ -28,13 +28,13 @@ while(menu == True):
     elif escolha == 2:
         print(f"\nA quantidade de estradas no grafo é: {g.numeroEstradas()}")
     elif escolha == 3:
-        v = input("Digite a cidade no qual deseja determinar os vizinhos:").upper()
+        v = input("Digite a cidade no qual deseja determinar os vizinhos: ").upper()
         print(f"\nA cidade {v} é vizinha das cidades: {', '.join(g.vizinhosDoVertice(v))}")
     elif escolha == 4:
         v = input("Digite a cidade no qual deseja determinar a quantidade de vizinhos: ").upper()
         print(f"\nA cidade {v} possui {g.grauDoVertice(v)} vizinhos")
     elif escolha == 5:
-        v, u = input("Digite as duas cidades que desenha descobrir a menor distancia (separadas por espaço): ").split()
+        v, u = input("Digite as duas cidades que deseja descobrir a menor distancia (separadas por espaço): ").split()
         v = v.upper()
         u = u.upper()
         print(f"\nA menor distancia entre a cidade {v} e {u} é {g.retornarMenorDistanciaEntreDuasCidades(v, u)}");
@@ -48,18 +48,18 @@ while(menu == True):
         v = g.cidadesCriticas()
         v = list(v)
         if len(v) == 1:
-            print(f"\n A cidade critica é {v[0]}")
+            print(f"\nA cidade critica é {v[0]}")
         elif len(v)>1:
-            print(f"\n As cidades criticas são {", ".join(v)}")
+            print(f"\nAs cidades criticas são {", ".join(v)}")
         else:
-            print(f"\n O grafo não possui cidades críticas")
+            print(f"\nO grafo não possui cidades críticas")
     elif escolha == 8:
         passeio = g.validacaoPasseioTuristico()
         validacaoPasseio = passeio == []
         if validacaoPasseio:
-            print("Não foi possível encontrar um passeio turístico com pelo menos 4 cidades")
+            print("\nNão foi possível encontrar um passeio turístico com pelo menos 4 cidades")
         else:
-            print("Foi possível encontrar um passeio turístico com pelo menos 4 cidades")
+            print("\nFoi possível encontrar um passeio turístico com pelo menos 4 cidades")
     elif escolha == 9:
         g.imprimePasseioTuristico()
     print()
