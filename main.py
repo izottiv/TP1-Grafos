@@ -9,7 +9,6 @@ with open(nomeArquivo) as arquivo:
         v, u, peso = linha.split(",")
         g.adicionarAresta(v, u, int(peso))
 
-g.cidadesCriticas()
 menu = True
 while(menu == True):
     escolha = int(input("Deseja realizar qual operação utilizando a bibliotceca ?\n" \
